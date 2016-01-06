@@ -18,6 +18,10 @@ private:
   double m_iaccum;
   double m_setpoint;
 
+  double m_kp;
+  double m_ki;
+  double m_kd;
+
   int64_t m_prevTime;
 
   RobotPIDInput* m_input;
@@ -36,9 +40,15 @@ public:
     m_setpoint = 0;
 
     m_prevTime = 0;
+
+    m_kp = m_ki = m_kd = 0;
   }
 
   void update() {
+
+    //Null pointer check.
+    if (m_input == 0) return;
+    if (m_output == 0) return;
 
     double output = 0;
 
@@ -72,6 +82,8 @@ public:
     SmartDashboard::putNumber("P_Output", pOutput);
     SmartDashboard::putNumber("I_Output", iOutput);
     SmartDashboard::putNumber("D_Output", dOutput);
+
+    SmartDashboard::putNumber("PID_Output", output);
 
     m_output->writePIDOutput(output);
   }
